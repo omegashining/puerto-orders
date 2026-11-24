@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: orders-api
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/orders_db}
+server:
+  port: ${PORT:8080}
+app:
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:5173}
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
