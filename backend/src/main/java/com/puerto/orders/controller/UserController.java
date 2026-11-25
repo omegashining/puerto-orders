@@ -32,7 +32,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequiredArgsConstructor
 @Tag(name = "Usuarios", description = "Alta, consulta, actualización y baja de clientes")
 public class UserController {
-
     private final UserService userService;
 
     @Operation(summary = "Lista usuarios (paginado)")
