@@ -1,14 +1,30 @@
 spring:
   application:
     name: orders-api
+  mongodb:
+    uri: ${MONGODB_URI:mongodb://localhost:27017/orders_db}
   data:
     mongodb:
       uri: ${MONGODB_URI:mongodb://localhost:27017/orders_db}
+      auto-index-creation: true
+      representation:
+        big-decimal: decimal128
+    web:
+      pageable:
+        max-page-size: 100
+  mvc:
+    problemdetails:
+      enabled: true
+
 server:
   port: ${PORT:8080}
+
 app:
   cors:
     allowed-origins: ${CORS_ORIGINS:http://localhost:5173}
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
