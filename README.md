@@ -10,6 +10,69 @@ flowchart LR
     API --> DB[(MongoDB<br/>:27017)]
 ```
 
+## Modelo de datos
+
+Dos colecciones, `users` y `orders`. `Customer`, `Address` y `OrderItem` son documentos embebidos, no colecciones. El pedido guarda una copia de los datos del cliente y la dirección al momento de la compra, para conservar el histórico aunque el usuario cambie.
+
+```mermaid
+erDiagram
+    USERS ||--o{ ORDERS : "realiza"
+    USERS ||--|| ADDRESS : "shippingAddress"
+    ORDERS ||--|| CUSTOMER : "customer"
+    ORDERS ||--|| ADDRESS : "shippingAddress"
+    ORDERS ||--|{ ORDER_ITEM : "items"
+
+    USERS {
+        ObjectId _id PK
+        string firstName
+        string lastName
+        string secondLastName "opcional"
+        string email UK
+        Address shippingAddress "embebido"
+        Date createdAt
+        Date updatedAt
+        long version
+    }
+
+    ORDERS {
+        ObjectId _id PK
+        string orderNumber UK
+        string userId FK "indexado"
+        Customer customer "embebido, copia del usuario"
+        Address shippingAddress "embebido"
+        OrderItem[] items "embebido"
+        string status "CREATED, PAID, SHIPPED, DELIVERED, CANCELLED"
+        Decimal128 total
+        string searchText "normalizado para el typeahead"
+        Date createdAt "indexado"
+        Date updatedAt
+        long version
+    }
+
+    CUSTOMER {
+        string firstName
+        string lastName
+        string secondLastName
+        string email
+    }
+
+    ADDRESS {
+        string street
+        string externalNumber
+        string internalNumber "opcional"
+        string neighborhood
+        string city
+        string state
+        string zipCode
+    }
+
+    ORDER_ITEM {
+        string productCode
+        int quantity
+        Decimal128 price
+    }
+```
+
 ## Requisitos
 
 - JDK 21
